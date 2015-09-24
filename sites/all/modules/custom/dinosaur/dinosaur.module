@@ -106,17 +106,25 @@ function dinosaur_my_form_validate($form, &$form_state) {
  * form successfully processes
  */
 function dinosaur_my_form_submit($form, &$form_state) {
-	//dsm($form);
-	$valid_email = $form_state['values']['email'];
+	 //dsm($form);
+    print_r($form['name']);
+	//$valid_email = $form_state['name']['email']['#value'];
 
-	dsm($form['name']['selectbox']['#value']);
-
-	// REQUETTE...
-
-    drupal_set_message(t('The form has been submitted.'));
+	//dsm($form['name']['selectbox']['#value']);
     
+        $out_choice = $form['name']['selectbox']['#value'];
+        $out_first = check_plain($form['name']['first']['#value']);
+        $out_email = $form['name']['email']['#value'];
+        
+        drupal_set_message($out_choice );
+        drupal_set_message($out_first);
+        drupal_set_message($out_email);
+        
+	// REQUETTE...
+//dsm($form['name']['email']['#value']);
+    drupal_set_message(t('The form has been submitted.'));
 
     // REDIRECT
-    $form_state['redirect'] = '/content/thanks';
+    //$form_state['redirect'] = '/content/thanks';
 }
 
