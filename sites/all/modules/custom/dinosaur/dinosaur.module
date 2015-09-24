@@ -95,10 +95,9 @@ $form['name']['email'] = array(
  * Validates the form.
  */
 function dinosaur_my_form_validate($form, &$form_state) {
-  $valid_email = $form_state['values']['email'];
-  if (!valid_email_address($valid_email)) {
-     form_error($element, t('Please enter a valid email address.'));
-   }
+    if (!valid_email_address($form_state['values']['email'])) {
+        form_set_error('email', t('That e-mail address is not valid.'));
+    }
 }
 /**
  * Add a submit handler/function to the form.
