@@ -6,6 +6,10 @@
 *
 */
 
+/*
+ * J'ai un doute sur la table ! elle est en place mais je sais pas si elel s'accorde avec le formulaire...
+ */
+
 function dinosaur_schema() {
 
   $schema = array();
