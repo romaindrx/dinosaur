@@ -1,0 +1,63 @@
+; Packaging information for drupalbase
+name = "DrupalBase"
+description = "Theme, Admin, Module settings base ; One content type Page;"
+; exclusive = by default is the single choice !
+;exclusive = "1"
+core = "7.x"
+; ----------
+; Dependencies
+; ----------
+; Administration
+dependencies[] = admin_menu
+dependencies[] = admin_menu_toolbar
+dependencies[] = module_filter
+; Chaos tool suite
+dependencies[] = ctools
+; Core
+dependencies[] = block
+dependencies[] = color
+dependencies[] = comment
+dependencies[] = contextual
+dependencies[] = dashboard
+dependencies[] = dblog
+dependencies[] = field
+dependencies[] = field_sql_storage
+dependencies[] = field_ui
+dependencies[] = file
+dependencies[] = filter
+dependencies[] = help
+dependencies[] = image
+dependencies[] = list
+dependencies[] = menu
+dependencies[] = node
+dependencies[] = number
+dependencies[] = options
+dependencies[] = path
+dependencies[] = rdf
+dependencies[] = search
+dependencies[] = shortcut
+dependencies[] = system
+dependencies[] = taxonomy
+dependencies[] = text
+dependencies[] = update
+dependencies[] = user
+; Development
+dependencies[] = profiler_builder
+dependencies[] = profiler_builder_extras
+; Fields
+dependencies[] = field_group
+; Other
+dependencies[] = backup_migrate
+dependencies[] = pathauto
+dependencies[] = token
+dependencies[] = libraries
+; User interface
+dependencies[] = ckeditor
+; Webform
+dependencies[] = webform
+; Views
+dependencies[] = views
+dependencies[] = views_ui
+; Features
+dependencies[] = features
+

@@ -1,0 +1,123 @@
+<?php
+
+/**
+ * @file
+ * A module  Drupal Test Nurum.
+ *
+ * 
+ */
+
+/**
+ * Implements hook_help().
+ *
+ * Displays help and module information.
+ *
+ * @param path 
+ *   Which path of the site we're using to display help
+ * @param arg 
+ *   Array that holds the current path as returned from arg() function
+ */
+function dinosaur_help($path, $arg) {
+  switch ($path) {
+    case "admin/help#dinosaur":
+      return '<p>' . t("Simply vote for the Dinosaur !") . '</p>';
+      break;
+  }
+} 
+
+
+function dinosaur_menu() {
+  $items = array();
+  $items['dinosaur/form'] = array(
+    'title' => t('Vote for you favorite dinosaur'),
+    'page callback' => 'dinosaur_form',
+    'access arguments' => array('access content'),
+    'description' => t('Vote for you favorite dinosaur'),
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+
+/**
+ * Returns the form.
+ */
+function dinosaur_form() {
+  return drupal_get_form('dinosaur_my_form');
+}
+/**
+ * Returns the render array for the form.
+ */
+function dinosaur_my_form($form_state) {
+  $form['name'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('VOTING'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+  );
+  
+  $form ['name']['selectbox'] = array(
+    '#type' => 'select',
+    '#title' => t('Dinosaur'),
+    '#default_value' => $node->selectbox,
+    '#options' => array(
+      'dinosaur_green' => 'Dinosaur Green',
+      'dinosaur_blue' => 'Dinosaur Blue',
+      'dinosaur_red' => 'Dinosaur Red',
+    ),
+    '#description' => t('Choose a Dinosaur.'),
+  );
+
+  $form['name']['first'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Your name'),
+    '#description' => "Please enter your first name.",
+    '#size' => 20,
+    '#maxlength' => 20,
+    '#required' => TRUE,
+  );
+
+$form['name']['email'] = array(
+    '#type' => 'textfield',
+    '#size' => 20,
+    '#title' => t('Your Email'),
+    '#required' => TRUE,
+    '#element_validate' => array('dinosaur_my_form_validate'),
+  );
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => 'Submit',
+  );
+  return $form;
+}
+/**
+ * Validates the form.
+ */
+function dinosaur_my_form_validate($form, &$form_state) {
+  $valid_email = $form_state['values']['email'];
+  if (!valid_email_address($valid_email)) {
+     form_error($element, t('Please enter a valid email address.'));
+   }
+}
+/**
+ * Add a submit handler/function to the form.
+ *
+ * This will add a completion message to the screen when the
+ * form successfully processes
+ */
+function dinosaur_my_form_submit($form, &$form_state) {
+	//dsm($form);
+	$valid_email = $form_state['values']['email'];
+
+	dsm($form['name']['selectbox']['#value']);
+
+	// REQUETTE...
+
+    drupal_set_message(t('The form has been submitted.'));
+    
+
+    // REDIRECT
+    $form_state['redirect'] = '/content/thanks';
+}
+

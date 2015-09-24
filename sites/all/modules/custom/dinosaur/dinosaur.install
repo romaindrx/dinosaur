@@ -1,0 +1,50 @@
+<?php
+
+/*
+*
+* Implements hook_schema()
+*
+*/
+
+function dinosaur_schema() {
+
+  $schema = array();
+  $schema ['dinosaur_my_form'] = array(
+    
+    'description' => 'The base table for nodes.',
+    'fields' => array(
+      'did' => array(
+        'description' => 'The primary identifier for table.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'selectbox' => array(
+        'description' => 'The choice of the dinosaur.',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'first' => array(
+        'description' => 'The first name.',
+        'type' => 'varchar',
+        'length' => 55,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'email' => array(
+        'description' => 'The email of user.',
+        'type' => 'varchar',
+        'length' => 55,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'indexes' => array(
+      'inosaur_my_form' => array('email'),
+    ),
+    'primary key' => array('did'),
+  );
+  return $schema;
+}

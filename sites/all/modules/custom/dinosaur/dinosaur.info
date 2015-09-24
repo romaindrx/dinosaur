@@ -1,0 +1,8 @@
+name = Dinosaur vote Form
+description = A form for vote a dinosaur choice.
+package = Drupal 7 Development
+core = 7.x
+;files[] = dinosaur.module
+
+;dependencies[] = autoload
+;php = 5.5
