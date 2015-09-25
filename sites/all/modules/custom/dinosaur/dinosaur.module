@@ -30,8 +30,8 @@ function dinosaur_menu() {
   $items = array();
   $items['dinosaur/form'] = array(
     'title' => t('Vote for you favorite dinosaur'),
-    'page callback' => 'drupal_get_form',
-    'access arguments' => array('dinosaur_form'),
+    'page callback' => 'dinosaur_form',
+    'access arguments' => array('access content'),
     'description' => t('Vote for you favorite dinosaur'),
     'type' => MENU_CALLBACK,
   );
