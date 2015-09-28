@@ -1,0 +1,160 @@
+<?php
+
+/**
+ * Module de form test pour email
+ *
+ * romain
+ */
+
+
+/**
+ * Implements hook_help().
+ *
+ * Displays help and module information.
+ *
+ * @param path 
+ *   Which path of the site we're using to display help
+ * @param arg 
+ *   Array that holds the current path as returned from arg() function
+ */
+function crevette_help($path, $arg){
+  switch ($path){
+    case 'admin/help#crevette':
+      return '<p>'. t('form of testing email validate, simply').'</p>';
+      break;
+  }
+}
+
+/*
+ *  hook_menu()
+ * 
+ */
+function crevette_menu(){
+    $items = array();
+    $items['crevette/form'] = array(
+      'title' => t('Validate email'),
+      'type' => MENU_CALLBACK,
+      'page callback' => 'drupal_get_form',
+      'access arguments' => array('acces crevette_form'),
+      'description' => 'Form testing validate email',
+      'page arguments' => array('crevette_my_form'),
+    );
+
+    $items['crevette/form-submission'] = array(
+      'title' => t('Submission crevette'),
+      'type' => MENU_NORMAL_ITEM,
+      'page callback' => 'form_submission_crevette',
+      'access arguments' => array('acces crevette_form submission'),
+      'description' => 'Form submission validate email',
+    );
+    return $items;
+    
+}
+
+/**
+ * Returns the form.
+ */
+function crevette_form() {
+  return drupal_get_form('crevette_my_form');
+}
+
+/*
+ *  hook_form()
+ * 
+ */
+function crevette_my_form($form_state){  
+    $form['name'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Email'),
+      '#collapsible' => TRUE,
+      '#collapsed' => FALSE,
+    );
+
+    $form['name']['first'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Your name'),
+    '#description' => "Please enter your first name.",
+    '#size' => 20,
+    '#maxlength' => 20,
+    '#required' => FALSE,
+  );
+    
+    $form['name']['email'] = array(
+      '#type' => 'textfield',
+      '#title' => 'Email',
+      '#size' => 20,
+      '#maxlength' => 20,
+      '#required' => TRUE,
+      '#element_validate' => array('crevette_my_form_validate'),
+    );
+
+    $form['name']['comments'] = array(
+    '#title' => t('Comments'),
+    '#type' => 'textarea',
+    '#description' => t('The comment will be unpublished if it contains any of the phrases above. Use a case-sensitive, comma-separated list of phrases. Example: funny, bungee jumping, "Company, Inc."'),
+    '#default_value' => isset(  $context['keywords']) ? drupal_implode_tags($context['keywords']) : '',
+);
+
+    $form['name']['submit'] = array(
+      '#type' => 'submit',
+      '#value' => 'Submit',
+  );
+
+  return $form;
+}
+
+/*
+ *  hook_validate()
+ * 
+ */
+function crevette_my_form_validate($form, &$form_state){
+
+    if (!valid_email_address($form_state['values']['email'])) {
+        form_set_error('email', t('That e-mail address is not valid.'));
+    }
+}
+
+/*
+ *  hook_submit()
+ * 
+ */
+function crevette_my_form_submit($form, &$form_state){
+
+    // dsm($form['name']['first']['#value']);
+    // dsm($form['name']['email']['#value']);
+    
+    //dsm($form);
+    $result = db_insert('crevette_my_form') 
+        ->fields(array('first' => check_plain($form_state['values']['first']), 
+                        'email' => $form_state['values']['email'],
+                        'comments' => $form_state['values']['comments']
+                ))->execute();
+    drupal_set_message(t('NICE adress mail OK'));
+   
+}
+
+/*
+ *
+ *  view form_submission
+ *
+ */
+
+function form_submission_crevette(){
+    //$results = db_query("SELECT * FROM {crevette_my_form}");
+
+    $header = array(t('ID'), t('First Name'), t('E-mail'), t('Comments'));
+    $rows = array();
+
+    foreach ($results as $result) {
+      $rows[] = array(
+        $result->cid,
+        $result->first,
+        $result->email,
+        $result->comments,
+        );
+    }
+
+    return theme('table', array('header' => $header, 'rows' => $rows));
+}
+
+

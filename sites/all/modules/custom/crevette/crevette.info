@@ -1,0 +1,8 @@
+name = Crevette Form
+description = A form for crevette test Email.
+package = Drupal 7 Development
+core = 7.x
+;files[] = dinosaur.module
+
+;dependencies[] = autoload
+;php = 5.5

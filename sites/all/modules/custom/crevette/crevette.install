@@ -1,0 +1,54 @@
+<?php
+
+/*
+*
+* Implements hook_schema()
+*
+*/
+
+/*
+ * J'ai un doute sur la table ! elle est en place mais je sais pas si elel s'accorde avec le formulaire...
+ */
+
+function crevette_schema() {
+
+  $schema = array();
+  $schema ['crevette_my_form'] = array(
+    
+    'description' => 'The base table for crevette form.',
+    'fields' => array(
+      'cid' => array(
+        'description' => 'The primary identifier for table.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'first' => array(
+        'description' => 'The first name.',
+        'type' => 'varchar',
+        'length' => 55,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'email' => array(
+        'description' => 'The email of user.',
+        'type' => 'varchar',
+        'length' => 55,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'comments' => array(
+        'description' => 'comments of form',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'indexes' => array(
+      'crevette_my_form' => array('email'),
+    ),
+    'primary key' => array('cid'),
+  );
+  return $schema;
+}
