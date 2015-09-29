@@ -140,17 +140,23 @@ function crevette_my_form_submit($form, &$form_state){
  */
 
 function form_submission_crevette(){
+  // REQUETE
     //$results = db_query("SELECT * FROM {crevette_my_form}");
+    //
+    $query = db_select('crevette_my_form', 'cf')
+          ->fields('cf', array('cid', 'first', 'email', 'comments'))
+          ->orderBy('first', 'ASC');
+          $results = $query->execute();
 
     $header = array(t('ID'), t('First Name'), t('E-mail'), t('Comments'));
     $rows = array();
 
     foreach ($results as $result) {
       $rows[] = array(
-        $result->cid,
-        $result->first,
-        $result->email,
-        $result->comments,
+        check_plain($result->cid),
+        check_plain($result->first),
+        check_plain($result->email),
+        check_plain($result->comments),
         );
     }
 
