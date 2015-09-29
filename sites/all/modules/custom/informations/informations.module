@@ -44,30 +44,31 @@ function informations_block_configure($delta=''){
 	switch($delta) {
     case 'informations' :
     $form['name']['name_company'] = array(
-	    '#type' => 'textfield',
+	    '#type' => 'text_format',
 	    '#title' => t('Name Company'),
 	    '#description' => "Please enter company name.",
 	    '#size' => 55,
 	    '#maxlength' => 55,
 	    //'#required' => FALSE,
-	    '#default_value' => variable_get('name_variable', ''),
+	    '#default_value' => variable_get('name_variable'),
 	  );
     $form['name']['tel_company'] = array(
-	    '#type' => 'textfield',
+	    '#type' => 'text_format',
 	    '#title' => t('Telephon Number Company'),
 	    '#description' => "Please enter company telephon number.",
 	    //'#size' => 20,
 	    //'#maxlength' => 20,
 	    '#required' => FALSE,
-	    '#default_value' => variable_get('tel_variable', ''),
+	    '#default_value' => variable_get('tel_variable'),
 	  );
     $form['name']['email'] = array(
-      '#type' => 'textfield',
+      '#type' => 'text_format',
       '#title' => 'Email',
-      '#size' => 20,
-      '#maxlength' => 20,
+      // '#size' => 20,
+      // '#maxlength' => 20,
+      'wysiwyg' => false,
       //'#required' => TRUE,
-      '#default_value' => variable_get('email_variable', ''),
+      '#default_value' => variable_get('email_variable'),
       //'#element_validate' => array('crevette_my_form_validate'),
     );
     // File selection form element
@@ -105,6 +106,9 @@ function informations_block_save($delta = '', $edit = array()) {
       // Saving the WYSIWYG text      
       variable_set('text_variable', $edit['text_body']['value']);
       variable_set('tel_variable', $edit['tel_company']['value']);
+      variable_set('name_variable', $edit['name_company']['value']);
+      variable_set('email_variable', $edit['email']['value']);
+
 
       // Saving the file, setting it to a permanent state, setting a FID variable
       $file = file_load($edit['file']);
@@ -176,26 +180,26 @@ function informations_view() {
       '#suffix' => '</div>',
     ),
     'name_company' => array(
-      '#prefix' => '<h3 class="title_company">',
+      '#prefix' => '<h3 class="title-company">',
       '#type' => 'markup',
       '#markup' => $ncompany,
       '#suffix' => '</h3>',
     ),
     'tel_company' => array(
-      '#prefix' => '<h5 class="num_company">',
+      '#prefix' => '<h5 class="num-company">',
       '#type' => 'markup',
       '#markup' => $cnumber,
       '#suffix' => '</h5>',
     ),
     'mail_company' => array(
-      '#prefix' => '<h5 class="mail_company">',
+      '#prefix' => '<h5 class="mail-company">',
       '#type' => 'markup',
       '#markup' => $mail,
       '#suffix' => '</h5>',
     ),
 
     'message' => array(
-      '#prefix' => '<div class="text_company">',
+      '#prefix' => '<div class="text-company">',
       '#type' => 'markup',
       '#markup' => $text,
       '#suffix' => '</div>',
