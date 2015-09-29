@@ -1,0 +1,26 @@
+/**
+ * 
+ */
+
+@import url(https://fonts.googleapis.com/css?family=Montserrat:400,700|Josefin+Slab);
+
+
+
+#block-informations-informations{
+        box-shadow: 4px 2px 14px #000;
+        float: left;
+}
+
+#dashboard #block-informations-informations h2{
+	font-family: 'Josefin Slab', serif;
+    text-align: center;
+    margin-right: 122px;
+}
+
+#dashboard #block-informations-informations .content p{
+	font-family: 'Montserrat', sans-serif;
+}
+.logo_dashboard{
+	width: 250px;
+    float: left;
+}

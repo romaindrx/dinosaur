@@ -1,0 +1,209 @@
+<?php
+
+/**
+ * Module block informations
+ *
+ * 2015-09-29
+ * 
+ * romain
+ */
+
+
+/**
+ * Implements hook_help().
+ * 
+ */
+function informations_help($path, $arg){
+  switch ($path){
+    case 'admin/help#informations':
+      return '<p>'. t('Informations block for the company, display in the dashboard').'</p>';
+      break;
+  }
+}
+
+/**
+ * Implements hook_block_info().
+ */
+
+function informations_block_info(){
+	$blocks['informations'] = array(
+    // The name that will appear in the block list.
+    'info' => t('Informations Company'),
+    // Default setting.
+    'cache' => DRUPAL_CACHE_PER_ROLE,
+  );
+  return $blocks;
+}
+/**
+ * Implements hook_block_configure().
+ */
+
+function informations_block_configure($delta=''){
+	$form = array();
+
+	switch($delta) {
+    case 'informations' :
+    $form['name']['name_company'] = array(
+	    '#type' => 'textfield',
+	    '#title' => t('Name Company'),
+	    '#description' => "Please enter company name.",
+	    '#size' => 55,
+	    '#maxlength' => 55,
+	    //'#required' => FALSE,
+	    '#default_value' => variable_get('name_variable', ''),
+	  );
+    $form['name']['tel_company'] = array(
+	    '#type' => 'textfield',
+	    '#title' => t('Telephon Number Company'),
+	    '#description' => "Please enter company telephon number.",
+	    //'#size' => 20,
+	    //'#maxlength' => 20,
+	    '#required' => FALSE,
+	    '#default_value' => variable_get('tel_variable', ''),
+	  );
+    $form['name']['email'] = array(
+      '#type' => 'textfield',
+      '#title' => 'Email',
+      '#size' => 20,
+      '#maxlength' => 20,
+      //'#required' => TRUE,
+      '#default_value' => variable_get('email_variable', ''),
+      //'#element_validate' => array('crevette_my_form_validate'),
+    );
+    // File selection form element
+      $form['name']['file'] = array(
+        '#name' => 'block_image',
+        '#type' => 'managed_file',
+        '#title' => t('Choose an Image File logo Company'),
+        '#description' => t('Select an Image for the custom block.  Only *.gif, *.png, *.jpg, and *.jpeg images allowed.'),
+        '#default_value' => variable_get('block_image_fid', ''),
+        '#upload_location' => 'public://block_image/',
+        '#upload_validators' => array(
+        'file_validate_extensions' => array('gif png jpg jpeg'),
+        ),
+      );
+      // Text field form element
+      $form['name']['text_body'] = array(
+        '#type' => 'text_format',
+        '#title' => t('Enter your address here in WYSIWYG format'),
+        '#default_value' => variable_get('text_variable', ''),
+      );
+
+      
+      break;
+      }
+  return $form;
+
+}
+/**
+ * Implements hook_block_save().
+ */
+function informations_block_save($delta = '', $edit = array()) {
+  switch($delta) {
+    case 'informations' :
+    
+      // Saving the WYSIWYG text      
+      variable_set('text_variable', $edit['text_body']['value']);
+      variable_set('tel_variable', $edit['tel_company']['value']);
+
+      // Saving the file, setting it to a permanent state, setting a FID variable
+      $file = file_load($edit['file']);
+      $file->status = FILE_STATUS_PERMANENT;
+      file_save($file);
+      $block = block_load('informations', $delta);
+      file_usage_add($file, 'informations', 'block', $block->bid);
+      variable_set('block_image_fid', $file->fid);
+      break;
+  }
+}
+
+/**
+ * Implements nformations_contents().
+ * 
+ * Prepares the contents of the block.
+ */
+function informations_contents(){
+
+}
+
+
+/**
+ * Implements hook_block_view().
+ */
+function informations_block_view($delta='') {
+  $block = array();
+  
+  switch($delta) {
+    case 'informations' :
+      $block['content'] = informations_view();
+      break;
+  }
+  
+  return $block;
+
+}
+
+function informations_view() {
+  $block = array();
+
+  // Capture the image file path and form into HTML with attributes
+  $image_file = file_load(variable_get('block_image_fid', ''));
+  $image_path = '';
+
+  if (isset($image_file->uri)) {
+    $image_path = $image_file->uri;
+  }
+
+  $image = theme_image(array(
+    'path' => ($image_path),
+    'alt' => t('Image description here.'),
+    'title' => t('This is our block image.'),
+    'attributes' => array('class' => 'logo_dashboard'),
+  ));
+
+  // Capture WYSIWYG text from the variable
+  $text = variable_get('text_variable', '');
+  $ncompany = variable_get('name_variable', '');
+  $cnumber = variable_get('tel_variable', '');
+  $mail = variable_get('email_variable', '');
+
+  // Block output in HTML with div wrapper
+  $block = array(
+    'image' => array(
+      '#prefix' => '<div class="img">',
+      '#type' => 'markup',
+      '#markup' => $image,
+      '#suffix' => '</div>',
+    ),
+    'name_company' => array(
+      '#prefix' => '<h3 class="title_company">',
+      '#type' => 'markup',
+      '#markup' => $ncompany,
+      '#suffix' => '</h3>',
+    ),
+    'tel_company' => array(
+      '#prefix' => '<h5 class="num_company">',
+      '#type' => 'markup',
+      '#markup' => $cnumber,
+      '#suffix' => '</h5>',
+    ),
+    'mail_company' => array(
+      '#prefix' => '<h5 class="mail_company">',
+      '#type' => 'markup',
+      '#markup' => $mail,
+      '#suffix' => '</h5>',
+    ),
+
+    'message' => array(
+      '#prefix' => '<div class="text_company">',
+      '#type' => 'markup',
+      '#markup' => $text,
+      '#suffix' => '</div>',
+    ),
+  );
+
+  return $block;
+
+}
+
+
